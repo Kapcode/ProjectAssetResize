@@ -6,6 +6,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Main {
         ImageIO.setUseCache(false);
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Asset Resizer");
+            setAppIcon(frame);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
 
@@ -197,6 +199,24 @@ public class Main {
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
+    }
+
+    private static void setAppIcon(JFrame frame) {
+        List<Image> icons = new ArrayList<>();
+        String[] iconPaths = { "/icons/icon_16.png", "/icons/icon_32.png", "/icons/icon_64.png" };
+
+        for (String path : iconPaths) {
+            URL iconURL = Main.class.getResource(path);
+            if (iconURL != null) {
+                icons.add(new ImageIcon(iconURL).getImage());
+            } else {
+                System.err.println("Warning: Could not find icon resource: " + path);
+            }
+        }
+
+        if (!icons.isEmpty()) {
+            frame.setIconImages(icons);
+        }
     }
 
     private static void loadAssetsFromDirectory(DefaultListModel<String> listModel, File directory) {
